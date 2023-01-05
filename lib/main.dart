@@ -1,99 +1,46 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:myapp/pages/Screens/home_page.dart';
+import 'package:myapp/pages/splash/splash_page.dart';
+import 'package:myapp/routes/route_helper.dart';
+import '../controllers/popular_product_controller.dart';
+import '../pages/cart/cart_page.dart';
+import '../pages/Screens/food_page_body.dart';
+import '../controllers/recommended_product_controller.dart';
+import '../pages/Screens/signin_screen.dart';
+import '../pages/food/popular_food_detail.dart';
+import '../helper/dependencies.dart' as dep;
 
-void main() => runApp(MyApp());
+void main() async {
+  await dep.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyAEyUD2nwl89oXzbyM-6_ZQSzjFVGOydV8",
+      appId: "1:612047402921:android:9051134e05c7cd149e76b8",
+      messagingSenderId: "612047402921",
+      projectId: "utmfood-c49b0",
+    ),
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // Application name
-      title: 'Flutter Stateful Clicker Counter',
-      theme: ThemeData(
-        // Application theme data, you can set the colors for the application as
-        // you want
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Clicker Counter Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  final String title;
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+    return GetBuilder<PopularProductController>(builder: (_) {
+      return GetBuilder<RecommendedProductController>(builder: (_) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'UTMFood',
+          home: FoodPageBody(),
+          // initialRoute: RouteHelper.getSplashPage(),
+          // getPages: RouteHelper.routes,
+        );
+      });
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: TextStyle(fontSize: 25),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
   }
 }
